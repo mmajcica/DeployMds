@@ -1,0 +1,90 @@
+{
+  "id": "96658ac0-5804-11e7-bf88-73a4f76433ff",
+  "name": "BuildMDS",
+  "friendlyName": "Build MDS model packages",
+  "description": "Build Master Data Services model packages",
+  "author": "Ted van Haalen",
+  "helpMarkDown": "Build Master Data Services model packages",
+  "category": "Build",
+  "visibility": [
+    "Build"
+  ],
+  "demands": [],
+  "version": {
+    "Major": "1",
+    "Minor": "0",
+    "Patch": "0"
+  },
+  "minimumAgentVersion": "1.95.0",
+  "instanceNameFormat": "Create MDS package",
+  "inputs": [{
+      "name": "connectedServiceName",
+      "type": "connectedService:generic",
+      "label": "MDS Master Endpoint",
+      "required": true,
+      "helpMarkDown": "The MDS Master server."
+    },
+    {
+      "name": "mdsService",
+      "type": "string",
+      "label": "MDS Service",
+      "required": true,
+      "helpMarkDown": "The MDS service for the MDS instance that will be used."
+    },
+    {
+      "name": "mdsDatabaseInstance",
+      "type": "string",
+      "label": "MDS Database Instance",
+      "required": true,
+      "defaultValue": "SDEUC4110105\\VM_DEV_01",
+      "helpMarkDown": "The database instance where the master MDS database can be found."
+    },
+    {
+      "name": "mdsDatabase",
+      "type": "string",
+      "label": "MDS Database",
+      "required": true,
+      "defaultValue": "MDS_MASTER",
+      "helpMarkDown": "The database from which the MDS model packages are created."
+    },
+    {
+      "name": "mdsModels",
+      "type": "string",
+      "label": "MDS Models",
+      "required": true,
+      "helpMarkDown": "A comma-separated list of the MDS models for which packages must be created."
+    },
+    {
+      "name": "mdsWithData",
+      "type": "boolean",
+      "label": "With Data",
+      "defaultValue": "false",
+      "required": false,
+      "helpMarkDown": "Includes data from the selected MDS Master endpoint in the generated model packages."
+    },
+    {
+      "name": "ssVersion",
+      "type": "pickList",
+      "label": "SQL Server Version",
+      "required": true,
+      "options": {
+        "140": "SQL Server 2017",
+        "130": "SQL Server 2016",
+        "120": "SQL Server 2014",
+        "110": "SQL Server 2012"
+      }
+    },
+    {
+      "name": "targetFolder",
+      "type": "string",
+      "label": "Target Folder",
+      "required": false,
+      "helpMarkDown": "Target folder or UNC path files will copy to. You can use [variables](http://go.microsoft.com/fwlink/?LinkID=550988). Example: $(build.artifactstagingdirectory)."
+    }
+  ],
+  "execution": {
+    "PowerShell3": {
+      "target": "task.ps1"
+    }
+  }
+}

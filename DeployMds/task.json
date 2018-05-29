@@ -1,0 +1,161 @@
+{
+  "id": "249C8E61-2062-4199-A393-89B9BD5F2B31",
+  "name": "DeployMDS",
+  "friendlyName": "Deploy MDS model packages",
+  "description": "Deploy Master Data Services model packages",
+  "author": "Mario Majcica",
+  "helpMarkDown": "Deploy Master Data Services model packages",
+  "category": "Deploy",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "demands": [],
+  "version": {
+    "Major": "2",
+    "Minor": "1",
+    "Patch": "8"
+  },
+  "minimumAgentVersion": "1.95.0",
+  "instanceNameFormat": "Deploy MDS",
+  "groups": [
+    {
+        "displayName": "Server",
+        "isExpanded": true,
+        "name": "server"
+    },
+    {
+      "displayName": "Database",
+      "isExpanded": true,
+      "name": "database"
+    },
+    {
+      "displayName": "Deployment",
+      "isExpanded": true,
+      "name": "deploy"
+    }
+  ],
+  "inputs": [{
+      "groupName": "server",
+      "name": "mdsServer",
+      "type": "string",
+      "label": "MDS Server",
+      "required": true,
+      "helpMarkDown": "The MDS service for the MDS instance that will be used."
+    },
+    {
+      "groupName": "server",
+      "name": "mdsUsername",
+      "type": "string",
+      "label": "Username",
+      "required": true,
+      "helpMarkDown": "The MDS service for the MDS instance that will be used."
+    },
+    {
+      "groupName": "server",
+      "name": "mdsPassword",
+      "type": "string",
+      "label": "Password",
+      "required": true,
+      "helpMarkDown": "The MDS service for the MDS instance that will be used."
+    },
+    {
+      "groupName": "database",
+      "name": "mdsDatabase",
+      "type": "string",
+      "label": "MDS Database name",
+      "required": true,
+      "defaultValue": "MDS_MASTER",
+      "helpMarkDown": "The database from which the MDS model packages are created."
+    },
+    {
+      "groupName": "database",
+      "name": "mdsDatabaseInstance",
+      "type": "string",
+      "label": "MDS Database Instance",
+      "required": true,
+      "defaultValue": "MSSQLSERVER",
+      "helpMarkDown": "The database instance where the master MDS database can be found."
+    },
+    {
+      "groupName": "database",
+      "name": "ssVersion",
+      "type": "pickList",
+      "label": "SQL Server Version",
+      "required": true,
+      "options": {
+        "140": "SQL Server 2017",
+        "130": "SQL Server 2016",
+        "120": "SQL Server 2014",
+        "110": "SQL Server 2012"
+      }
+    },
+    {
+      "groupName": "database",
+      "name": "mdsService",
+      "type": "string",
+      "label": "MDS Service",
+      "required": false,
+      "helpMarkDown": "Specifies the service name to connect to. This parameter is required if there are multiple instances of Master Data Services installed. Use the 'MDSModelDeploy listservices' command to list the available service instances."
+    },
+    {
+      "groupName": "deploy",
+      "name": "mdsPackages",
+      "type": "filePath",
+      "label": "MDS Packages",
+      "defaultValue": "**/*.pkg",
+      "required": true,
+      "helpMarkDown": ""
+    },
+    {
+      "groupName": "deploy",
+      "name": "mdsDeploymentType",
+      "type": "pickList",
+      "label": "Deployment Type",
+      "required": true,
+      "defaultValue": "model",
+      "helpMarkDown": "",
+      "options": {
+          "deployclone": "Deploy a clone of a model",
+          "deploynew": "Create a new model",
+          "deployupdate": "Update a model",
+          "deployupdatedata": "Update a model with data"
+      }
+    },
+    {
+      "groupName": "deploy",
+      "name": "mdsVersion",
+      "type": "string",
+      "label": "Version name",
+      "visibleRule": "mdsDeploymentType = deployupdatedata",
+      "required": true,
+      "defaultValue": "Version 1",
+      "helpMarkDown": "If the package contains master data, specifies the target version to be updated."
+    },
+    {
+      "groupName": "deploy",
+      "name": "mdsModel",
+      "type": "string",
+      "label": "Model name",
+      "visibleRule": "mdsDeploymentType = deploynew",
+      "required": true,
+      "defaultValue": "",
+      "helpMarkDown": "Specifies the new name for the model being deployed."
+    },
+    {
+      "groupName": "deploy",
+      "defaultValue": "false",
+      "visibleRule": "mdsDeploymentType = deployupdatedata",
+      "helpMarkDown": "After deployment with data, the members in the model are deployed but not yet validated. By checking this otion, deployment will run a validation on the model.",
+      "label": "Validate",
+      "name": "validate",
+      "required": false,
+      "type": "boolean"
+    }
+  ],
+  "execution": {
+    "PowerShell3": {
+      "target": "task.ps1"
+    }
+  }
+}
